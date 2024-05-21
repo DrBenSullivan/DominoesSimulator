@@ -1,5 +1,6 @@
 ﻿using static System.Console;
 using Dominoes_Game.Display.View;
+using Dominoes_Game.BusinessLogic;
 
 namespace Dominoes_Game;
 
@@ -23,6 +24,27 @@ class Game
         CursorVisible = false;
         Title = "DOMINOES - The Game";
 
-        MainMenu.Display();
+        //MainMenu.Display();
+
+        var DominoList = new List<(int, int)>
+        {
+            (1, 1),
+            (2, 2),
+            (2, 1),
+            (2, 2),
+            (1, 2)
+        };
+        (bool isSolveable, List<(int, int)> Solution) = SetChecker.DominoChecker(DominoList);
+        if (isSolveable)
+        {
+            string solutionString = "";
+            foreach (var s in Solution)
+            {
+                solutionString = String.Concat(solutionString, $" [{s.Item1}|{s.Item2}]");
+            }
+            Console.Write($"Dominoes are solveable. Solution:\n{solutionString}");
+        }
+        else Console.Write("Dominoes are not solveable");
+        Console.ReadKey(true);
     }
 }
