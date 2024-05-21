@@ -1,0 +1,67 @@
+﻿{
+  "MainMenu": {
+    "Header": "Home",
+    "Prompt": [
+      "Welcome to Dominoes, please select an option:"
+    ],
+    "MenuOptions": [
+      "Play",
+      "About",
+      "Exit Game"
+    ],
+    "Routes": [
+      "Play",
+      "About",
+      "Exit"
+    ]
+  },
+  "Play": {
+    "Header": "Home",
+    "Prompt": [
+      "Are you ready to start a new game?"
+    ],
+    "MenuOptions": [
+      "Yes, Let's Play!",
+      "No, Return To Main Menu"
+    ],
+    "Routes": [
+      "StartGame",
+      "MainMenu"
+    ]
+  },
+  "About": {
+    "Header": "Home",
+    "Prompt": [
+      "Thanks for checking out my Dominoes Game!\n",
+      "It was inspired by Erik Schierboom's practice project",
+      "available on Exercism:",
+      "https://exercism.org/tracks/csharp/exercises/dominoes \n",
+      "If you have any feedback or would like to connect, please",
+      "feel free to visit my profiles:\n",
+      "  - GitHub:   https://github.com/DrBenSullivan",
+      "  - LinkedIn: https://linkedin.com/DrBenSullivan \n",
+      "Thanks again,\n",
+      "Ben"
+    ],
+    "MenuOptions": [
+      "Return To Main Menu"
+    ],
+    "Routes": [
+      "MainMenu"
+    ]
+  },
+  "Exit": {
+    "Header": "Home",
+    "Prompt": [
+      "Are you sure you want to exit the game?"
+    ],
+    "MenuOptions": [
+      "Yes, Exit Dominoes",
+      "No, Return To Main Menu"
+    ],
+    "Routes": [
+      "ConfirmExit",
+      "MainMenu"
+    ]
+  }
+}
