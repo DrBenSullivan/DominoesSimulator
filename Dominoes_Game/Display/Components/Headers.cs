@@ -10,19 +10,22 @@ WELCOME TO...
 
             +---+---+ +---+---+ +---+---+ +---+---+
             | D | O | | M | I | | N | O | | E | S |
-            +---+---+ +---+---+ +---+---+ +---+---+
+            +---+---+ +---+---+ +---+---+ +---+---+           
 
-                                                  ...THE GAME!
---------------------------------------------------------------
+                                                   ...THE GAME!
+---------------------------------------------------------------
 ");
     }
 
-    public static void Subheader()
+    public static void Scoreboard(int TotalSets, int ChainableSets, int UnchainableSets)
     {
-        WriteLine(@"
-                    [D|O] [M|I] [N|O] [E|S]
-
---------------------------------------------------------------
-");
+        string totalSets = TotalSets.ToString().PadRight(2);
+        string chainableSets = ChainableSets.ToString().PadRight(2);
+        string unchainableSets = UnchainableSets.ToString().PadRight(2);
+        WriteLine(@$"+-------------------------------------------------------------+
+|                   [D|O] [M|I] [N|O] [E|S]                   |
++-------------------+----------------------+------------------+
+|  Sets Checked: {totalSets} |   Chainable Sets: {chainableSets} |  Unchainable: {unchainableSets} |
++-------------------+----------------------+------------------+");
     }
 }

@@ -76,7 +76,6 @@ public class MainMenu
         Action headerMethod = header switch
         {
             "Home" => Headers.Home,
-            "Subheader" => Headers.Subheader,
             _ => throw new ArgumentException("Unable to apply headerMethod in GetScreenData()"),
         };
 
