@@ -1,5 +1,4 @@
 ﻿using static System.Console;
-using Dominoes_Game.Display.View;
 using Dominoes_Game.BusinessLogic;
 
 namespace Dominoes_Game;
@@ -24,27 +23,54 @@ class Game
         CursorVisible = false;
         Title = "DOMINOES - The Game";
 
-        //MainMenu.Display();
-
-        var DominoList = new List<(int, int)>
+        // MainMenu.Display();
+        // TESTING ONLY****************************************************************
+        WriteLine("How many sets shall we test? Enter integer only:");
+        int inputIterations = Int32.Parse(ReadLine());
+        WriteLine("\nHow many dominoes per set? Enter integer only:");
+        int inputNumberOfDominoes = Int32.Parse(ReadLine());
+        int totalCount = 0;
+        int solvable = 0;
+        int notSolvable = 0;
+        for (int i = 0; i<inputIterations; i++)
         {
-            (1, 1),
-            (2, 2),
-            (2, 1),
-            (2, 2),
-            (1, 2)
-        };
-        (bool isSolveable, List<(int, int)> Solution) = SetChecker.DominoChecker(DominoList);
-        if (isSolveable)
-        {
-            string solutionString = "";
-            foreach (var s in Solution)
+            Write(@$"
++---------------++--------------++----------------+
+|Total Sets: {totalCount,-2} || Solvable: {solvable,-2} || Unsolvable: {notSolvable,-3}|
++---------------++--------------++----------------+
+The random domino set is:
+");
+            var DominoList = DominoGenerator.GenerateDominoSet(inputNumberOfDominoes);
+            
+            foreach (var domino in DominoList)
             {
-                solutionString = String.Concat(solutionString, $" [{s.Item1}|{s.Item2}]");
+                Write($"[{domino.Item1}|{domino.Item2}] ");
             }
-            Console.Write($"Dominoes are solveable. Solution:\n{solutionString}");
+            totalCount++;
+            (bool isSolveable, List<(int, int)> Solution) = SetChecker.DominoChecker(DominoList);
+            if (isSolveable && Solution is not null)
+            {
+                WriteLine("\n\nDomino set is solvable! Solution:");
+                foreach (var domino in Solution)
+                {
+                    Write($"[{domino.Item1}|{domino.Item2}] ");
+                }
+                solvable++;
+                Console.ReadKey(true);
+                continue;
+            }
+            WriteLine("\nDomino set is unsolvable\n\n\n");
+            notSolvable++;
+            Console.ReadKey(true);
         }
-        else Console.Write("Dominoes are not solveable");
-        Console.ReadKey(true);
+        Write(@$"
+===================== RESULT ======================
+
++---------------++--------------++----------------+
+|Total Sets: {totalCount,-2} || Solvable: {solvable,-2} || Unsolvable: {notSolvable,-3}|
++---------------++--------------++----------------+
+
+=================== END OF TEST ===================          
+");
     }
 }
