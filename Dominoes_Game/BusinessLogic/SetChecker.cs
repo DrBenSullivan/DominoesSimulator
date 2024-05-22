@@ -35,17 +35,35 @@ namespace Dominoes_Game.BusinessLogic
             // A domino has two values, one on either side. In graph theory, each possible value (i.e. 1-6) can be represented as a
             // vertex. The domino itself is an edge i.e. a "path" or line between two vertices.
             // To do this we iterate through the domino set & count the number of each vertex into a dictionary.
+            //var vertexCounts = new Dictionary<int, int>();
+            //foreach (var domino in dominoes)
+            //{
+
+            //    if (!vertexCounts.ContainsKey(domino.Item1))
+            //    {
+            //        vertexCounts[domino.Item1] = 0;
+            //    }
+            //    vertexCounts[domino.Item1]++;
+
+            //    if (!vertexCounts.ContainsKey(domino.Item2))
+            //    {
+            //        vertexCounts[domino.Item2] = 0;
+            //    }
+            //    vertexCounts[domino.Item2]++;
+
+            //}
+
             var vertexCounts = new Dictionary<int, int>();
             foreach (var domino in dominoes)
             {
 
-                if (!vertexCounts.ContainsKey(domino.Item1))
+                if (!vertexCounts.TryGetValue(domino.Item1, out int _ ))
                 {
                     vertexCounts[domino.Item1] = 0;
                 }
                 vertexCounts[domino.Item1]++;
 
-                if (!vertexCounts.ContainsKey(domino.Item2))
+                if (!vertexCounts.TryGetValue(domino.Item2, out int _))
                 {
                     vertexCounts[domino.Item2] = 0;
                 }
@@ -53,7 +71,6 @@ namespace Dominoes_Game.BusinessLogic
 
             }
 
-            // TESTING *************************************
             string CheckEven(int val)
             {
                 if (val % 2 == 0) return "Even";
@@ -66,8 +83,6 @@ namespace Dominoes_Game.BusinessLogic
                 string evenness = CheckEven(entry.Value);
                 Console.WriteLine($"{entry} : {evenness}");
             }
-            // TESTING *************************************
-
 
             // If Euler's Theorem does not apply, there cannot be a closed loop present in the set.
             if (!vertexCounts.Values.All(count => count % 2 == 0))

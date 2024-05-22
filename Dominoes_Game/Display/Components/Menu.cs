@@ -1,4 +1,5 @@
-﻿using static System.Console;
+﻿using Dominoes_Game.Display.Views;
+using static System.Console;
 
 namespace Dominoes_Game.Display.Components;
 
@@ -30,7 +31,7 @@ internal class Menu(Action displayHeaderMethod, string prompt, string[] options)
         }
     }
 
-    public static int GetMenuChoice(Action displayHeaderMethod, string prompt, string[] options)
+    public static ScreenName GetMenuChoice(Action displayHeaderMethod, string prompt, string[] options, ScreenName[] screensArray)
     {
         var menu = new Menu(displayHeaderMethod, prompt, options);
         ConsoleKey keyPressed;
@@ -69,6 +70,6 @@ internal class Menu(Action displayHeaderMethod, string prompt, string[] options)
 
         } while (keyPressed != ConsoleKey.Enter);
 
-        return menu.ActiveIndex;
+        return screensArray[menu.ActiveIndex];
     }
 }
