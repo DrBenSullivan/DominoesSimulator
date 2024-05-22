@@ -76,6 +76,10 @@ namespace Dominoes_Game.BusinessLogic
                 Console.ReadKey();
                 return false;
             }
+            else
+            {
+                Console.WriteLine("Euler's theory applies, starting Depth-First Search.");
+            }
 
             // But, this does not guarantee that the set can be arranged into a single, unbroken loop; just that it could contain one.
             // To do this we can use a depth-first search to confirm that a loop is traversible without revisiting a vertex & that
@@ -104,11 +108,12 @@ namespace Dominoes_Game.BusinessLogic
             // If all vertices were reached, the domino set can be arranged into a closed loop or, a Eulerian cycle.
             if (!vertexCounts.Keys.All(vertex => visitedVerticesSet.Contains(vertex)))
             {
-                Console.WriteLine("Euler's theory does not apply, exiting this iteration.");
+                Console.WriteLine("All vertices NOT traversible, terminating iteration.");
                 Console.ReadKey();
                 return false;
             };
 
+            Console.WriteLine("All vertices traversible, searching for solution.");
             return true;
         }
 
