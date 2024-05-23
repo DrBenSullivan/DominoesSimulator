@@ -1,22 +1,24 @@
-﻿using Dominoes_Game.Display.Views;
+﻿using DominoesSimulator.Display.Views;
 
 using static System.Console;
 
 
-namespace Dominoes_Game;
+namespace DominoesSimulator;
 
-class Game
+class DominoSimulator
 {
-    public static void Dominoes_Game()
-    { }
+    public static void App() { }
 
     static void Main()
     {
-        SetWindowSize(63, 30);
+        SetWindowSize(63, 33);
         CursorVisible = false;
-        Title = "DOMINOES - The Game";
+        Title = "DOMINOES - The CurrentGame";
 
-        HomePage.Display();
-        ReadKey(true);
+        while (true)
+        {
+            Home.Run();
+            Game.Run();
+        }
     }
 }

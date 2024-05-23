@@ -1,4 +1,4 @@
-﻿namespace Dominoes_Game
+﻿namespace DominoesSimulator
 {
     internal class DominoGenerator
     {

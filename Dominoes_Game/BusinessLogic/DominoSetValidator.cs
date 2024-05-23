@@ -1,28 +1,22 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-
-namespace Dominoes_Game.BusinessLogic
+﻿namespace DominoesSimulator.BusinessLogic
 {
-    internal class SetChecker
+    internal class DominoSetValidator
     {
-        public static (bool, List<(int, int)>?) DominoChecker(List<(int, int)> dominoes)
+        public static List<(int, int)>? SetValidator(List<(int, int)> dominoes)
         {
 
             // Mathematically determine if a domino set contains a closed loop. See method documentation.
-            if (!CanFormEulerianLoop(dominoes)) return (false, null);
+            if (!CanFormEulerianLoop(dominoes)) return null;
 
             // If Euler's Theorem applies, we can find a solution through recursive iteration by searching for a valid
             // chain of dominoes, rather than a loop & only returning it if the first and last values of the chain are equal.
-            (bool isChainable, List<(int, int)>? solution) = SearchForSolution(dominoes);
-            if (isChainable && 
-                solution is not null &&
-                ValidateSolution(dominoes.Count, solution))
+            List<(int, int)>? solution = SearchForSolution(dominoes);
+            if (solution is not null && ValidateSolution(dominoes.Count, solution))
             {
-                return (true, solution);
+                return solution;
             }
-            
-            return (false, null);
+
+            return null;
         }
 
         private static bool CanFormEulerianLoop(List<(int, int)> dominoes)
@@ -35,29 +29,12 @@ namespace Dominoes_Game.BusinessLogic
             // A domino has two values, one on either side. In graph theory, each possible value (i.e. 1-6) can be represented as a
             // vertex. The domino itself is an edge i.e. a "path" or line between two vertices.
             // To do this we iterate through the domino set & count the number of each vertex into a dictionary.
-            //var vertexCounts = new Dictionary<int, int>();
-            //foreach (var domino in dominoes)
-            //{
-
-            //    if (!vertexCounts.ContainsKey(domino.Item1))
-            //    {
-            //        vertexCounts[domino.Item1] = 0;
-            //    }
-            //    vertexCounts[domino.Item1]++;
-
-            //    if (!vertexCounts.ContainsKey(domino.Item2))
-            //    {
-            //        vertexCounts[domino.Item2] = 0;
-            //    }
-            //    vertexCounts[domino.Item2]++;
-
-            //}
 
             var vertexCounts = new Dictionary<int, int>();
             foreach (var domino in dominoes)
             {
 
-                if (!vertexCounts.TryGetValue(domino.Item1, out int _ ))
+                if (!vertexCounts.TryGetValue(domino.Item1, out int _))
                 {
                     vertexCounts[domino.Item1] = 0;
                 }
@@ -71,29 +48,10 @@ namespace Dominoes_Game.BusinessLogic
 
             }
 
-            string CheckEven(int val)
-            {
-                if (val % 2 == 0) return "Even";
-                else return "Odd";
-            }
-
-            Console.WriteLine("\nVertexCounts:");
-            foreach (var entry in vertexCounts)
-            {
-                string evenness = CheckEven(entry.Value);
-                Console.WriteLine($"{entry} : {evenness}");
-            }
-
             // If Euler's Theorem does not apply, there cannot be a closed loop present in the set.
             if (!vertexCounts.Values.All(count => count % 2 == 0))
             {
-                Console.WriteLine("Euler's theory does not apply, terminating iteration.");
-                Console.ReadKey();
                 return false;
-            }
-            else
-            {
-                Console.WriteLine("Euler's theory applies, starting Depth-First Search.");
             }
 
             // But, this does not guarantee that the set can be arranged into a single, unbroken loop; just that it could contain one.
@@ -123,16 +81,13 @@ namespace Dominoes_Game.BusinessLogic
             // If all vertices were reached, the domino set can be arranged into a closed loop or, a Eulerian cycle.
             if (!vertexCounts.Keys.All(vertex => visitedVerticesSet.Contains(vertex)))
             {
-                Console.WriteLine("All vertices NOT traversible, terminating iteration.");
-                Console.ReadKey();
                 return false;
             };
 
-            Console.WriteLine("All vertices traversible, searching for solution.");
             return true;
         }
 
-        private static (bool, List<(int, int)>?) SearchForSolution(List<(int, int)> dominoSet)
+        private static List<(int, int)>? SearchForSolution(List<(int, int)> dominoSet)
         {
             // Start recursion by iterating through each domino value in the set and running a recursive function on it.
             foreach (var domino in dominoSet)
@@ -142,24 +97,21 @@ namespace Dominoes_Game.BusinessLogic
                 clonedDominoList.Remove(domino);
 
                 var workingSolutionsList = new List<(int, int)> { domino };
-                (bool isSolutionFound, List<(int, int)>? possibleSolution) = IterateForSolution(dominoSet.Count,
-                                                                                                clonedDominoList, 
-                                                                                                workingSolutionsList);
+                List<(int, int)>? possibleSolution = IterateForSolution(dominoSet.Count,
+                                                                        clonedDominoList,
+                                                                        workingSolutionsList);
 
-                // If a solution is found, return true & the solutiosn.
-                if (isSolutionFound && possibleSolution is not null)
+                // If a solution is found, return it.
+                if (ValidateSolution(dominoSet.Count, possibleSolution))
                 {
-                    if (ValidateSolution(dominoSet.Count, possibleSolution))
-                    {
-                        return (true, possibleSolution);
-                    }
+                    return possibleSolution;
                 }
             }
 
-            return (false, null);
+            return null;
         }
 
-        private static (bool, List<(int, int)>?) IterateForSolution(
+        private static List<(int, int)>? IterateForSolution(
             int solutionLengthRequired,
             List<(int, int)> workerDominoList,
             List<(int, int)> workerSolutionList)
@@ -167,7 +119,7 @@ namespace Dominoes_Game.BusinessLogic
             // Guard clause to ensure valid solution not already found.
             if (ValidateSolution(solutionLengthRequired, workerSolutionList))
             {
-                return (true, workerSolutionList);
+                return workerSolutionList;
             }
 
             // Find the last value in the domino chain and iterate through remaining dominoes to find matches.
@@ -190,14 +142,14 @@ namespace Dominoes_Game.BusinessLogic
                 }
 
                 // Restart loop with each found match.
-                (bool isSolved, List<(int, int)>? possibleSolution) = IterateForSolution(solutionLengthRequired, ClonedDominoList, ClonedSolutionList);
-                if (isSolved && possibleSolution is not null && ValidateSolution(solutionLengthRequired, possibleSolution))
+                List<(int, int)>? possibleSolution = IterateForSolution(solutionLengthRequired, ClonedDominoList, ClonedSolutionList);
+                if (possibleSolution is not null && ValidateSolution(solutionLengthRequired, possibleSolution))
                 {
-                    return (true, possibleSolution);
+                    return possibleSolution;
                 }
             }
 
-            return (false, null);
+            return null;
         }
 
         // Simple method for cloning lists of dominoes.
